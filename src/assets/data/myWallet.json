@@ -1,0 +1,7 @@
+[
+    { "category": "Cash", "name": "Groceries", "amount": "860" },
+    { "category": "Bank Account", "name": "Rent Payment", "amount": "5000" },
+    { "category": "Credit Card", "name": "Phone Bill", "amount": "1200" },
+    { "category": "Savings", "name": "Emergency Fund", "amount": "6000" },
+    { "category": "Cash", "name": "Dining Out", "amount": "700" }
+]

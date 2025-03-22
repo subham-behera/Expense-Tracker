@@ -1,0 +1,24 @@
+import { TbPigMoney } from "react-icons/tb";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
+import Stats from "../components/Stats";
+import Hero from "../components/Hero";
+
+function Tracker() {
+    return (
+        <div className="flex w-screen h-screen justify-center items-center font-sans bg-gradient-to-r from-violet-500 to-purple-500">
+            <div className="w-[700px] h-[520px] shadow rounded-lg bg-white flex flex-col">
+                {/* Top panel */}
+                <Header/>
+                {/* Mid panel */}
+                <Navbar/>
+                {/* Stats */}
+                <Stats/>
+                {/* Hero */}
+                <Hero/>
+            </div>
+        </div>
+    );
+}
+
+export default Tracker;
