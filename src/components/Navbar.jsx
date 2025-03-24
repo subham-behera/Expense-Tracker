@@ -13,6 +13,10 @@ function Navbar() {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const handleClear=()=>{
+        window.location.reload()
+    }
+
     const handleCategory = (category) => {
         switch (category) {
             case "Cash":
@@ -78,7 +82,7 @@ function Navbar() {
 
             {/* Clear All Button */}
             <div>
-                <button className="text-gray-500 px-4 py-1.5 border border-gray-500 cursor-pointer rounded-md text-xs font-medium">
+                <button className="text-gray-500 px-4 py-1.5 border border-gray-500 cursor-pointer rounded-md text-xs font-medium" onClick={handleClear}>
                     <span>Clear All</span>
                 </button>
             </div>

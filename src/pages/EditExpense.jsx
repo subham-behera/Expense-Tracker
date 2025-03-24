@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { IoCloseSharp, IoNewspaperSharp } from "react-icons/io5";
 
-function Transaction({ onAddExpense, onClose }) {
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("Cash");
+function EditExpense({ expense, onUpdateExpense, onClose }) {
+  const [name, setName] = useState(expense.name);
+  const [amount, setAmount] = useState(expense.amount);
+  const [category, setCategory] = useState(expense.category);
 
   const handleSubmit = () => {
     if (!name || !amount) return;
-    onAddExpense({ name, amount: parseFloat(amount), category });
+    onUpdateExpense({ ...expense, name, amount: parseFloat(amount), category });
   };
 
   return (
@@ -19,7 +19,7 @@ function Transaction({ onAddExpense, onClose }) {
             <div className="px-2 py-2 bg-purple-300 text-purple-700 text-sm rounded-lg shadow-2xs">
               <IoNewspaperSharp />
             </div>
-            <span className="text-[16px] font-semibold">Add Expense</span>
+            <span className="text-[16px] font-semibold">Edit Expense</span>
           </div>
           <button onClick={onClose} className="cursor-pointer">
             <IoCloseSharp />
@@ -38,16 +38,21 @@ function Transaction({ onAddExpense, onClose }) {
         <div className="flex flex-row px-6 py-4 items-center">
           <div className="flex flex-col gap-y-1 w-1/2">
             <span>Expense Amount</span>
-            <input 
-            type="number" 
-            placeholder="Enter Amount"
-            className="w-[90%] text-gray-500 px-2 py-1 border border-gray-300 rounded-sm" 
-            value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <input
+              type="number"
+              placeholder="Enter Amount"
+              className="w-[90%] text-gray-500 px-2 py-1 border border-gray-300 rounded-sm"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
           </div>
           <div className="flex flex-col gap-y-1">
             <span>Wallet</span>
-            <select className="w-[90%] text-gray-500 px-2 py-1 border border-gray-300 rounded-sm" 
-            value={category} onChange={(e) => setCategory(e.target.value)}>
+            <select
+              className="w-[90%] text-gray-500 px-2 py-1 border border-gray-300 rounded-sm"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
               <option value="Cash">Cash</option>
               <option value="Bank Account">Bank Account</option>
               <option value="Credit Card">Credit Card</option>
@@ -59,11 +64,11 @@ function Transaction({ onAddExpense, onClose }) {
           <button onClick={onClose} 
           className="px-3 py-1.5 border border-gray-300 rounded-sm text-sm cursor-pointer">Cancel</button>
           <button onClick={handleSubmit} 
-          className="px-3 py-1.5 border rounded-sm text-white text-sm bg-purple-700 cursor-pointer">Add Expense</button>
+          className="px-3 py-1.5 border rounded-sm text-white text-sm bg-purple-700 cursor-pointer">Update Expense</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Transaction;
+export default EditExpense;
