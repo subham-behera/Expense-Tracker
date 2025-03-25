@@ -25,8 +25,8 @@ function ItemList({ category, name, amount, id, onEdit, onDelete }) {
   };
 
   const handleUpdateExpense = (updatedExpense) => {
-    onEdit(updatedExpense); // Update the main state in App.js
-    setIsEditing(false); // Close the modal
+    onEdit(updatedExpense); 
+    setIsEditing(false); 
   };
 
   return (
@@ -56,9 +56,9 @@ function ItemList({ category, name, amount, id, onEdit, onDelete }) {
 
       {isEditing && (
         <EditExpense
-          expense={editingExpense} 
-          onUpdateExpense={handleUpdateExpense} 
-          onClose={() => setIsEditing(false)} 
+          expense={editingExpense}
+          onUpdateExpense={handleUpdateExpense}
+          onClose={() => setIsEditing(false)}
         />
       )}
     </>

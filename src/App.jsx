@@ -35,15 +35,24 @@ function App() {
     setEditingExpense(null);
   };
 
+  const handleDeleteExpense = (id) => {
+    setItems(items.filter(item => item.id !== id));
+  };
+
   return (
     <>
-      <Tracker onNewExpense={handleNewExpense} items={items} onEdit={handleEditExpense} />
+      <Tracker 
+        onNewExpense={handleNewExpense} 
+        items={items} 
+        onEdit={handleEditExpense} 
+        onDelete={handleDeleteExpense} // Pass handleDeleteExpense
+      />
       {isTransactionOpen && <Transaction onAddExpense={handleAddExpense} onClose={() => setIsTransactionOpen(false)} />}
       {isEditOpen && editingExpense && (
-        <EditExpense 
-          expense={editingExpense} 
-          onUpdateExpense={handleUpdateExpense} 
-          onClose={() => setIsEditOpen(false)} 
+        <EditExpense
+          expense={editingExpense}
+          onUpdateExpense={handleUpdateExpense}
+          onClose={() => setIsEditOpen(false)}
         />
       )}
     </>
