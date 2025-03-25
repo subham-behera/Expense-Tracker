@@ -6,7 +6,7 @@ import EditExpense from "./pages/EditExpense";
 function App() {
   const list = [
     { id: 1, category: "Cash", name: "Groceries", amount: "860" },
-    { id: 2, category: "Credit Card", name: "Phone Bill", amount: "1200" },
+    { id: 2, category: "Credit Card", name: "Phone Bill", amount: "600" },
     { id: 3, category: "Cash", name: "Dining Out", amount: "700" }
   ];
 
