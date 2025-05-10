@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Tracker from "./pages/Tracker";
 import Transaction from "./pages/Transaction";
 import EditExpense from "./pages/EditExpense";
@@ -14,6 +14,18 @@ function App() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [items, setItems] = useState(list);
   const [editingExpense, setEditingExpense] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter items based on search term
+  const filteredItems = useMemo(() => {
+    if (!searchTerm.trim()) return items;
+    
+    return items.filter(item => 
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.amount.toString().includes(searchTerm)
+    );
+  }, [items, searchTerm]);
 
   const handleNewExpense = () => {
     setIsTransactionOpen(true);
@@ -39,13 +51,20 @@ function App() {
     setItems(items.filter(item => item.id !== id));
   };
 
+  const handleSearchChange = (term) => {
+    setSearchTerm(term);
+  };
+
   return (
     <>
       <Tracker 
         onNewExpense={handleNewExpense} 
-        items={items} 
+        items={filteredItems}
+        allItems={items}
         onEdit={handleEditExpense} 
-        onDelete={handleDeleteExpense} // Pass handleDeleteExpense
+        onDelete={handleDeleteExpense}
+        searchTerm={searchTerm}
+        onSearchChange={handleSearchChange}
       />
       {isTransactionOpen && <Transaction onAddExpense={handleAddExpense} onClose={() => setIsTransactionOpen(false)} />}
       {isEditOpen && editingExpense && (

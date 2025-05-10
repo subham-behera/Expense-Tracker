@@ -3,13 +3,17 @@ import Navbar from "../components/Navbar";
 import Stats from "../components/Stats";
 import Hero from "../components/Hero";
 
-function Tracker({ onNewExpense, items, onEdit, onDelete }) { 
+function Tracker({ onNewExpense, items, allItems, onEdit, onDelete, searchTerm, onSearchChange }) { 
   return (
-    <div className="flex w-screen h-screen justify-center items-center font-sans bg-gradient-to-r from-violet-500 to-purple-500">
-      <div className="w-[700px] h-[520px] shadow rounded-lg bg-white flex flex-col">
-        <Header onNewExpense={onNewExpense} />
+    <div className="flex w-screen min-h-screen justify-center items-center font-sans bg-gradient-to-r from-violet-500 to-purple-500 p-2 md:p-4">
+      <div className="w-full max-w-[700px] h-auto min-h-[520px] shadow rounded-lg bg-white flex flex-col">
+        <Header 
+          onNewExpense={onNewExpense} 
+          searchTerm={searchTerm}
+          onSearchChange={onSearchChange}
+        />
         <Navbar />
-        <Stats items={items} />
+        <Stats items={allItems} />
         <Hero items={items} onEdit={onEdit} onDelete={onDelete} /> 
       </div>
     </div>

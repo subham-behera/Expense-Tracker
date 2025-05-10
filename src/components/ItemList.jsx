@@ -31,8 +31,8 @@ function ItemList({ category, name, amount, id, onEdit, onDelete }) {
 
   return (
     <>
-      <div className="flex flex-row items-center font-sans w-full shadow-lg rounded-lg shadow-md justify-between px-6 py-4">
-        <div className="flex flex-row gap-x-2 items-center">
+      <div className="flex flex-col sm:flex-row items-center font-sans w-full shadow-lg rounded-lg shadow-md justify-between px-3 sm:px-6 py-3 sm:py-4 gap-y-2">
+        <div className="flex flex-row gap-x-2 items-center w-full sm:w-auto">
           <div className="px-2 py-2 bg-purple-200 text-purple-700 rounded-lg shadow-2xs">
             {handleCategory(category)}
           </div>
@@ -41,7 +41,7 @@ function ItemList({ category, name, amount, id, onEdit, onDelete }) {
             <span className="text-[11px] text-gray-500">{category}</span>
           </div>
         </div>
-        <div className="flex flex-row font-bold items-center gap-x-10">
+        <div className="flex flex-row font-bold items-center justify-between sm:justify-start w-full sm:w-auto sm:gap-x-10">
           <div>₹ {amount}</div>
           <div className="flex items-center gap-x-2 flex-row">
             <button onClick={handleEditClick} className="px-2 py-2 bg-purple-200 text-purple-700 text-sm rounded-lg shadow-2xs cursor-pointer">
