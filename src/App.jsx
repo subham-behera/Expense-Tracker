@@ -15,17 +15,28 @@ function App() {
   const [items, setItems] = useState(list);
   const [editingExpense, setEditingExpense] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Filter items based on search term
+  // Filter items based on search term and category
   const filteredItems = useMemo(() => {
-    if (!searchTerm.trim()) return items;
+    let filtered = items;
     
-    return items.filter(item => 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.amount.toString().includes(searchTerm)
-    );
-  }, [items, searchTerm]);
+    // Apply category filter
+    if (selectedCategory) {
+      filtered = filtered.filter(item => item.category === selectedCategory);
+    }
+    
+    // Apply search filter
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(item => 
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.amount.toString().includes(searchTerm)
+      );
+    }
+    
+    return filtered;
+  }, [items, searchTerm, selectedCategory]);
 
   const handleNewExpense = () => {
     setIsTransactionOpen(true);
@@ -55,6 +66,10 @@ function App() {
     setSearchTerm(term);
   };
 
+  const handleFilterByCategory = (category) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <>
       <Tracker 
@@ -65,6 +80,7 @@ function App() {
         onDelete={handleDeleteExpense}
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
+        onFilterByCategory={handleFilterByCategory}
       />
       {isTransactionOpen && <Transaction onAddExpense={handleAddExpense} onClose={() => setIsTransactionOpen(false)} />}
       {isEditOpen && editingExpense && (
