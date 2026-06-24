@@ -1,24 +1,28 @@
 import ItemList from "./ItemList";
+import { FiInbox } from "react-icons/fi";
 
 function Hero({ items, onEdit, onDelete }) { 
   return (
-    <div className="flex flex-row w-full h-full min-h-[200px] sm:min-h-[325px] font-sans px-3 sm:px-6 py-2 sm:py-4">
-      <div className="flex flex-col w-full h-full overflow-y-auto gap-y-2 sm:gap-y-4 px-1 sm:px-2 py-1 sm:py-2">
+    <div className="flex-1 flex flex-col w-full px-6 py-2">
+      <div className="flex flex-col gap-y-3">
         {items.length > 0 ? (
           items.map((item) => (
             <ItemList
               key={item.id}
-              id={item.id}
-              category={item.category}
-              name={item.name}
-              amount={item.amount}
+              {...item}
               onEdit={onEdit}
               onDelete={onDelete} 
             />
           ))
         ) : (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            No expenses found
+          <div className="flex flex-col items-center justify-center py-16 text-center text-slate-400 gap-y-3">
+            <div className="p-4 bg-slate-50 border border-slate-100 rounded-full text-slate-300">
+              <FiInbox className="w-8 h-8" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-600">No expenses found</p>
+              <p className="text-xs text-slate-400 mt-0.5">Try searching for something else or add a new record.</p>
+            </div>
           </div>
         )}
       </div>

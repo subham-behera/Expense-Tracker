@@ -5,9 +5,12 @@ import EditExpense from "./pages/EditExpense";
 
 function App() {
   const list = [
-    { id: 1, category: "Cash", name: "Groceries", amount: "860" },
-    { id: 2, category: "Credit Card", name: "Phone Bill", amount: "600" },
-    { id: 3, category: "Cash", name: "Dining Out", amount: "700" }
+    { id: 1, category: "Cash", name: "Salary Credit", amount: "25000", type: "income", date: "2026-06-01" },
+    { id: 2, category: "Cash", name: "Groceries", amount: "860", type: "expense", date: "2026-06-15" },
+    { id: 3, category: "Credit Card", name: "Phone Bill", amount: "600", type: "expense", date: "2026-06-20" },
+    { id: 4, category: "Bank Account", name: "Rent Payment", amount: "5000", type: "expense", date: "2026-06-05" },
+    { id: 5, category: "Savings", name: "Stock Dividend", amount: "1200", type: "income", date: "2026-06-18" },
+    { id: 6, category: "Cash", name: "Dining Out", amount: "700", type: "expense", date: "2026-06-24" }
   ];
 
   const [isTransactionOpen, setIsTransactionOpen] = useState(false);
@@ -16,9 +19,11 @@ function App() {
   const [editingExpense, setEditingExpense] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [sortBy, setSortBy] = useState("date-desc");
+  const [budget, setBudget] = useState(15000);
 
-  // Filter items based on search term and category
-  const filteredItems = useMemo(() => {
+  // Filter & sort items based on search term, category, and sorting selection
+  const sortedAndFilteredItems = useMemo(() => {
     let filtered = items;
     
     // Apply category filter
@@ -35,8 +40,22 @@ function App() {
       );
     }
     
-    return filtered;
-  }, [items, searchTerm, selectedCategory]);
+    // Apply sorting
+    const sorted = [...filtered].sort((a, b) => {
+      if (sortBy === "date-desc") {
+        return new Date(b.date) - new Date(a.date);
+      } else if (sortBy === "date-asc") {
+        return new Date(a.date) - new Date(b.date);
+      } else if (sortBy === "amount-desc") {
+        return parseFloat(b.amount) - parseFloat(a.amount);
+      } else if (sortBy === "amount-asc") {
+        return parseFloat(a.amount) - parseFloat(b.amount);
+      }
+      return 0;
+    });
+    
+    return sorted;
+  }, [items, searchTerm, selectedCategory, sortBy]);
 
   const handleNewExpense = () => {
     setIsTransactionOpen(true);
@@ -71,16 +90,21 @@ function App() {
   };
 
   return (
-    <>
+    <div className="bg-slate-50 min-h-screen text-slate-900 font-sans flex flex-col justify-start items-center">
       <Tracker 
         onNewExpense={handleNewExpense} 
-        items={filteredItems}
+        items={sortedAndFilteredItems}
         allItems={items}
         onEdit={handleEditExpense} 
         onDelete={handleDeleteExpense}
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
         onFilterByCategory={handleFilterByCategory}
+        selectedCategory={selectedCategory}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        budget={budget}
+        onBudgetChange={setBudget}
       />
       {isTransactionOpen && <Transaction onAddExpense={handleAddExpense} onClose={() => setIsTransactionOpen(false)} />}
       {isEditOpen && editingExpense && (
@@ -90,7 +114,7 @@ function App() {
           onClose={() => setIsEditOpen(false)}
         />
       )}
-    </>
+    </div>
   );
 }
 

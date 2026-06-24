@@ -1,67 +1,92 @@
-import { useState } from "react";
 import { FaMoneyBill } from "react-icons/fa";
 import { GrCreditCard } from "react-icons/gr";
 import { MdAccountBalanceWallet, MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { PiBankBold } from "react-icons/pi";
-import EditExpense from "../pages/EditExpense";
 
-function ItemList({ category, name, amount, id, onEdit, onDelete }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingExpense, setEditingExpense] = useState(null);
-
-  const handleCategory = (category) => {
+function ItemList({ category, name, amount, id, type = "expense", date, onEdit, onDelete }) {
+  const getCategoryStyles = (category) => {
     switch (category) {
-      case "Cash": return <MdAccountBalanceWallet />;
-      case "Bank Account": return <PiBankBold />;
-      case "Credit Card": return <GrCreditCard />;
-      case "Savings": return <FaMoneyBill />;
-      default: return null;
+      case "Cash":
+        return {
+          icon: <MdAccountBalanceWallet className="w-4 h-4" />,
+          classes: "bg-emerald-50 text-emerald-600 border border-emerald-100/40"
+        };
+      case "Bank Account":
+        return {
+          icon: <PiBankBold className="w-4 h-4" />,
+          classes: "bg-blue-50 text-blue-600 border border-blue-100/40"
+        };
+      case "Credit Card":
+        return {
+          icon: <GrCreditCard className="w-4 h-4" />,
+          classes: "bg-amber-50 text-amber-600 border border-amber-100/40"
+        };
+      case "Savings":
+        return {
+          icon: <FaMoneyBill className="w-4 h-4" />,
+          classes: "bg-indigo-50 text-indigo-600 border border-indigo-100/40"
+        };
+      default:
+        return {
+          icon: <MdAccountBalanceWallet className="w-4 h-4" />,
+          classes: "bg-slate-50 text-slate-600 border border-slate-200/40"
+        };
     }
   };
 
-  const handleEditClick = () => {
-    setEditingExpense({ id, name, amount, category });
-    setIsEditing(true);
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString("en-IN", { month: "short", day: "numeric" });
+    } catch (e) {
+      return dateStr;
+    }
   };
 
-  const handleUpdateExpense = (updatedExpense) => {
-    onEdit(updatedExpense); 
-    setIsEditing(false); 
-  };
+  const { icon, classes } = getCategoryStyles(category);
+  const isIncome = type === "income";
 
   return (
-    <>
-      <div className="flex flex-col sm:flex-row items-center font-sans w-full shadow-lg rounded-lg shadow-md justify-between px-3 sm:px-6 py-3 sm:py-4 gap-y-2">
-        <div className="flex flex-row gap-x-2 items-center w-full sm:w-auto">
-          <div className="px-2 py-2 bg-purple-200 text-purple-700 rounded-lg shadow-2xs">
-            {handleCategory(category)}
-          </div>
-          <div className="flex justify-between flex-col">
-            <span className="text-[13px] font-bold text-black">{name}</span>
-            <span className="text-[11px] text-gray-500">{category}</span>
-          </div>
+    <div className="flex flex-row items-center justify-between p-4 bg-white border border-slate-100/80 rounded-2xl shadow-xs hover:shadow-sm hover:border-slate-200/40 transition-all duration-200">
+      {/* Left section: Category icon and Name info */}
+      <div className="flex flex-row items-center gap-x-3">
+        <div className={`p-2.5 rounded-xl ${classes}`}>
+          {icon}
         </div>
-        <div className="flex flex-row font-bold items-center justify-between sm:justify-start w-full sm:w-auto sm:gap-x-10">
-          <div>₹ {amount}</div>
-          <div className="flex items-center gap-x-2 flex-row">
-            <button onClick={handleEditClick} className="px-2 py-2 bg-purple-200 text-purple-700 text-sm rounded-lg shadow-2xs cursor-pointer">
-              <MdOutlineEdit />
-            </button>
-            <button onClick={() => onDelete(id)} className="px-2 py-2 bg-violet-200 text-violet-700 text-sm rounded-lg shadow-2xs cursor-pointer">
-              <MdDeleteOutline />
-            </button>
+        <div className="flex flex-col">
+          <span className="text-[13px] font-semibold text-slate-800 tracking-tight leading-none mb-1">{name}</span>
+          <div className="flex items-center gap-x-1.5 text-[10px] font-medium text-slate-400 leading-none">
+            <span>{category}</span>
+            <span>•</span>
+            <span className="font-mono">{formatDate(date)}</span>
           </div>
         </div>
       </div>
 
-      {isEditing && (
-        <EditExpense
-          expense={editingExpense}
-          onUpdateExpense={handleUpdateExpense}
-          onClose={() => setIsEditing(false)}
-        />
-      )}
-    </>
+      {/* Right section: Amount and edit/delete actions */}
+      <div className="flex flex-row items-center gap-x-4">
+        <span className={`text-sm font-bold font-mono tracking-tight ${isIncome ? 'text-emerald-600' : 'text-slate-900'}`}>
+          {isIncome ? "+" : "-"} ₹{parseFloat(amount).toLocaleString("en-IN")}
+        </span>
+        <div className="flex flex-row gap-x-1">
+          <button 
+            onClick={() => onEdit({ id, name, amount, category, type, date })} 
+            aria-label="Edit expense"
+            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all active:scale-90 cursor-pointer"
+          >
+            <MdOutlineEdit className="w-4 h-4" />
+          </button>
+          <button 
+            onClick={() => onDelete(id)} 
+            aria-label="Delete expense"
+            className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all active:scale-90 cursor-pointer"
+          >
+            <MdDeleteOutline className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
